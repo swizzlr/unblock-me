@@ -6,7 +6,7 @@
 Reopen your Terminal. Type "unblock-me" to toggle DHCP DNS and Unblock-Us DNS EU servers.
 
 ###Requirements
-- `pcregrep` (available via [Homebrew](http://brew.sh))
+- `pcre` (available via [Homebrew](http://brew.sh))
 
 ###Known Issues
 
