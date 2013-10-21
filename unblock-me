@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+UNBLOCK_US_EU_1="208.122.23.22"
+UNBLOCK_US_EU_2="208.122.23.23"
+
+DEFAULT_INTERFACE=`route -n get default|pcregrep -o '(?<=interface: ).+'`
+DEFAULT_INTERFACE_NAME=`networksetup -listallhardwareports|grep -B 1 "$DEFAULT_INTERFACE"|pcregrep -o '(?<=^Hardware Port: ).+$'`
+
+function _unblock {
+	echo "Setting up Unblock-Us."
+	networksetup -setdnsservers "$DEFAULT_INTERFACE_NAME" $UNBLOCK_US_EU_1 $UNBLOCK_US_EU_2
+}
+
+function _clear {
+	echo "Removing Unblock-Us."
+	networksetup -setdnsservers "$DEFAULT_INTERFACE_NAME" empty
+}
+
+CURRENT_DNS=`networksetup -getdnsservers "$DEFAULT_INTERFACE_NAME"`
+
+IS_BLOCKED=`echo "$CURRENT_DNS"|grep 'any DNS Servers set'`
+
+if [ -n "$IS_BLOCKED" ] ; then
+	_unblock;
+else
+	_clear;
+fi
